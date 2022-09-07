@@ -12,4 +12,8 @@ class Vendedores extends Model
     protected $fillable = ['id', 'nome', 'matricula'];
 
     protected $table = 'vendedores';
+
+    public function vendas() {
+        return $this->hasMany(Vendas::class, 'vendedor_id');
+    }
 }

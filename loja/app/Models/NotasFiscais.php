@@ -12,4 +12,5 @@ class NotasFiscais extends Model
     protected $fillable = ['id', 'venda_id', 'valor', 'imposto'];
 
     protected $table = 'notasFiscais';
+
 }

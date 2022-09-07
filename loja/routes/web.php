@@ -16,3 +16,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/avisos', function() {
+    //comandos XPTO
+    $avisos = ['avisos' => [0 => ['data' => '06/09/2022',
+                                  'aviso' => 'Amanhã será o bicentenário da independência do Brasil',
+                                  'exibir' => true],
+                            1 => ['data' => '05/09/2022',
+                                  'aviso' => 'Depois de amanhã será o bicentenário da independência do Brasil',
+                                  'exibir' => true],
+                            2 => ['data' => '04/09/2022',
+                                  'aviso' => 'Depois de depois de amanhã será o bicentenário da independência do Brasil',
+                                  'exibir' => true]]];
+    return view('avisos', $avisos);
+});
