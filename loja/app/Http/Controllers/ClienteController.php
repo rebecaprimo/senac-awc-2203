@@ -90,7 +90,7 @@ class ClienteController extends Controller
         $cliente = Clientes::find($id);
         $cliente->update($input);
 
-        return redirect()->route('cliente.index')->with('success', 'Cliente atualizado com sucesso!');
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     /**
