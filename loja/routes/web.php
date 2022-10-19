@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\ProdutosController;
-use App\Http\Controllers\VendedoresController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -16,17 +12,34 @@ use App\Http\Controllers\VendedoresController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//rota c/ o dashboard
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard'); //faz o controle
 
 require __DIR__.'/auth.php';
 
-Route::resource('/clientes', App\Http\Controllers\ClienteController::class)->middleware(['auth']); //rota da página inicial
-Route::resource('/produtos', App\Http\Controllers\ProdutosController::class)->middleware(['auth']);
-Route::resource('/vendedores', App\Http\Controllers\VendedoresController::class)->middleware(['auth']);
+//chama o método middleware
+
+/*
+rota resource p/ funcionar como crud (faz q req por métodos diferentes o htttp)
+Route::resource('/clientes', App\Http\Controllers\clienteController::class)->middleware(['auth']); //pega o método do objeto middleware
+Route::resource('/vendedores', App\Http\Controllers\vendedoresController::class)->middleware(['auth']); //puxar rota para funcionar
+Route::resource('/produtos', App\Http\Controllers\produtosController::class)->middleware(['auth']);
+*/
+
+//criar (grupo de rotas e colocar tudo dentro)
+Route::group(['middleware' => ['auth']], function() { //o middleware já está atribuido aqui por isso n precisa colocar SOLO (todas essas rotas estão protegidas pelo MIDDLEWARE de AUTENTICAÇÃO)
+    //P/ permissão
+    Route::resource('/users', App\Http\Controllers\UserController::class);
+    Route::resource('/roles', App\Http\Controllers\RoleController::class);
+    //das tabelas (crud)
+    Route::resource('/clientes', App\Http\Controllers\clienteController::class); //pega o método do objeto middleware
+    Route::resource('/vendedores', App\Http\Controllers\vendedoresController::class); //puxar rota para funcionar
+    Route::resource('/produtos', App\Http\Controllers\produtosController::class);
+});
+//devolve as rotas na CALLBACK

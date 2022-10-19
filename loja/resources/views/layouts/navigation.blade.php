@@ -15,16 +15,37 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes')">
+
+                    @can('clientes-list')
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.index')">
                         {{ __('Clientes') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('vendedores.index')" :active="request()->routeIs('vendedores')">
+                    @endcan
+
+                    @can('produtos-list')
+                    <x-nav-link :href="route('produtos.index')" :active="request()->routeIs('produtos.index')">
+                        {{ __('Produtos') }}
+                    </x-nav-link>
+                    @endcan
+
+                    @can('vendedores-list')
+                    <x-nav-link :href="route('vendedores.index')" :active="request()->routeIs('vendedores.index')">
                         {{ __('Vendedores') }}
                     </x-nav-link>
+                    @endcan
+
+                    @can('user-list')
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('produtos.index')">
+                        {{ __('Usuários') }}
+                    </x-nav-link>
+                    @endcan
+
+                    @can('role-list')
+                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
+                        {{ __('Perfis') }}
+                    </x-nav-link>
+                    @endcan
+
                 </div>
             </div>
 

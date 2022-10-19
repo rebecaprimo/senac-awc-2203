@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr; //Doc.-https://laravel.com/docs/master/helpers
-use App\User;
+use App\Models\User;
 use Spatie\Permission\Models\Role; //classe de perfil (define os perfis que tem acesso a determinada parte da aplicação)
 use DB; //banco de dados
 use Hash; //criptografia
 
 class UserController extends Controller
 {
+    public function __construct() //quando executado o método chama o construtor dele
+    {
+        $this->middleware('permission:user-list|user-creat|user-edit|user-delete', //middleware é um software que fornece serviços e recursos comuns a aplicações.
+                         ['only' => ['index', 'store']]);
+        $this->middleware('permission:user-create',
+                         ['only' => ['create', 'store']]);
+        $this->middleware('permission:user-edit',
+                         ['only' => ['edit', 'update']]);
+        $this->middleware('permission:user-delete',
+                         ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +29,7 @@ class UserController extends Controller
      */
     public function index(Request $request) //página inicial CRUD controle de usuário
     {
-        $data=User::orderBy('id','DESC')->paginate(5);
+        $data = User::orderBy('id','DESC')->paginate(5);
         return view('users.index',compact('data'))->with('i',($request->input('page',1)-1)*5);
     }
 

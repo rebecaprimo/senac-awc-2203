@@ -9,9 +9,9 @@
         </div>
         <div class="pull-right">
 
-
+            @can('vendedores-create')
             <a class="btn btn-success" href="{{ route('vendedores.create') }}"> + Novo vendedor</a>
-
+            @endcan
 
         </div>
     </div>
@@ -45,17 +45,17 @@
 
     <td>
        <a class="btn btn-info" href="{{ route('vendedores.show',$cliente->id) }}">Mostrar</a>
-
+        @can('vendedores-edit')
         <a class="btn btn-primary" href="{{ route('vendedores.edit',$cliente->id) }}">Editar</a>
+        @endcan
 
-
-
+        @can('vendedores-delete')
         {!! Form::open(['method' => 'DELETE','route' => ['vendedores.destroy', $cliente->id],'style'=>'display:inline']) !!}
 
             {!! Form::submit('Apagar', ['class' => 'btn btn-danger']) !!}
 
         {!! Form::close() !!}
-
+        @endcan
 
     </td>
   </tr>

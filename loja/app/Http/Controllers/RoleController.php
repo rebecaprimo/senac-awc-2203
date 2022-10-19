@@ -4,20 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission; //atribui ao usuário as limitações do sistema (define quem pode acessar o que)
+use Spatie\Permission\Models\Role;
 use DB;
 
 class RoleController extends Controller
 {
     public function __construct() //quando executado o método chama o construtor dele
     {
-        $this->middleware('permission:role-list|role-creat|role-edit|role-delete', //middleware é um software que fornece serviços e recursos comuns a aplicações.
+        /*$this->middleware('permission:role-list|role-creat|role-edit|role-delete', //middleware é um software que fornece serviços e recursos comuns a aplicações.
                          ['only' => ['index', 'store']]);
         $this->middleware('permission:role-create',
                          ['only' => ['create', 'store']]);
         $this->middleware('permission:role-edit',
                          ['only' => ['edit', 'update']]);
         $this->middleware('permission:role-delete',
-                         ['only' => ['destroy']]);
+                         ['only' => ['destroy']]);*/
     }
     /**
      * Display a listing of the resource.
@@ -52,9 +53,11 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, ['name' => 'required|unique:roles,name',
-                                   'permission' => 'required']);
+                                   'permissions' => 'required']);
+
         $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
+
+        $role->syncPermissions($request->input('permissions'));
 
         return redirect()->route('roles.index')->with('success', 'Perfil criado com sucesso!');
     }
@@ -69,11 +72,11 @@ class RoleController extends Controller
     {
         $role = Role::find($id);
 
-        $rolePermissions = Permission::join('role_has_perimissions',
-                                            'role_has_permissions.permissions_id',
+        $rolePermissions = Permission::join('role_has_permissions',
+                                            'role_has_permissions.permission_id',
                                             '=',
                                             'permissions.id')->where('role_has_permissions.role_id',
-                                            $id)-get();
+                                            $id)->get();
 
         return view('roles.show', compact('role', 'rolePermissions'));
     }
@@ -106,14 +109,14 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, ['name' => 'required',
-                                   'permission' => 'required']);
+                                   'permissions' => 'required']);
 
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
-        $role->syncPermissions($request->input('permission'));
+        $role->syncPermissions($request->input('permissions'));
 
-        return redirect()->route('roles.index')->with('success', 'Perfil atualizado!')
+        return redirect()->route('roles.index')->with('success', 'Perfil atualizado!');
     }
 
     /**
@@ -126,6 +129,6 @@ class RoleController extends Controller
     {
         DB::table('roles')->where('id', $id)->delete();
 
-        return redirect()->route('roles.index')-with('success', 'Perfil excluido com sucesso!');
+        return redirect()->route('roles.index')->with('success', 'Perfil excluido com sucesso!');
     }
 }

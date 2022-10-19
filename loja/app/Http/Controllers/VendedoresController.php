@@ -9,6 +9,17 @@ class VendedoresController extends Controller
 {
     private $qtdPorPagina = 5; //quantos itens vão aparecer na paginação
 
+    public function __construct() //quando executado o método chama o construtor dele
+    {
+        $this->middleware('permission:vendedores-list|vendedores-creat|vendedores-edit|vendedores-delete', //middleware é um software que fornece serviços e recursos comuns a aplicações.
+                         ['only' => ['index', 'store']]);
+        $this->middleware('permission:vendedores-create',
+                         ['only' => ['create', 'store']]);
+        $this->middleware('permission:vendedores-edit',
+                         ['only' => ['edit', 'update']]);
+        $this->middleware('permission:vendedores-delete',
+                         ['only' => ['destroy']]);
+    }
 
     /**
      * Display a listing of the resource.
