@@ -18,6 +18,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login', [App\Http\Controllers\APIController::class, 'login']);
+
+Route::get('logout', [App\Http\Controllers\APIController::class, 'logout']);
+
 Route::prefix('v1')->group(static function() {
     //vendedores
     Route::get('/vendedores', [App\Http\Controllers\VendedoresApiController::class, 'index']);
